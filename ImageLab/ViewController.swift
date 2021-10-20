@@ -18,6 +18,8 @@ class ViewController: UIViewController   {
     var detector:CIDetector! = nil
     let bridge = OpenCVBridge()
     
+    @IBOutlet weak var cameraButton: UIButton!
+    @IBOutlet weak var flashButton: UIButton!
     //MARK: Outlets in view
     @IBOutlet weak var flashSlider: UISlider!
     @IBOutlet weak var stageLabel: UILabel!
@@ -77,7 +79,27 @@ class ViewController: UIViewController   {
                              andContext: self.videoManager.getCIContext())
         
 //        self.bridge.processImage()
-        self.bridge.processFinger()
+        let result = self.bridge.processFinger()
+        if(result){
+            //finger detected
+            DispatchQueue.main.async() {
+                self.cameraButton.isEnabled = false
+                self.flashButton.isEnabled = false
+                
+//                self.videoManager.turnOnFlashwithLevel(1.0)
+            }
+            
+//            self.videoManager.turnOnFlashwithLevel(1)
+            
+        }
+        else{
+            //no finger detected
+            DispatchQueue.main.async() {
+                self.cameraButton.isEnabled = true
+                self.flashButton.isEnabled = true
+//                self.videoManager.turnOffFlash()
+            }
+        }
         retImage = self.bridge.getImageComposite() // get back opencv processed part of the image (overlayed on original)
         
         return retImage
