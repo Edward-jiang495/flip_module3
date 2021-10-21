@@ -18,6 +18,9 @@ class ViewController: UIViewController   {
     var detector:CIDetector! = nil
     let bridge = OpenCVBridge()
     
+    var timer = Timer()
+    var timerToggle:Bool = false
+    
     @IBOutlet weak var cameraButton: UIButton!
     @IBOutlet weak var flashButton: UIButton!
     //MARK: Outlets in view
@@ -27,6 +30,7 @@ class ViewController: UIViewController   {
     //MARK: ViewController Hierarchy
     override func viewDidLoad() {
         super.viewDidLoad()
+        timerToggle = false
         
         self.view.backgroundColor = nil
         
@@ -46,6 +50,7 @@ class ViewController: UIViewController   {
     
     }
     
+
     //MARK: Process image output
     func processImageSwift(inputImage:CIImage) -> CIImage{
         
@@ -80,13 +85,20 @@ class ViewController: UIViewController   {
         
 //        self.bridge.processImage()
         let result = self.bridge.processFinger()
+       
+        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(test), userInfo: nil, repeats: true)
+        timer.fire()
+
+
         if(result){
             //finger detected
             DispatchQueue.main.async() {
                 self.cameraButton.isEnabled = false
                 self.flashButton.isEnabled = false
+                if(self.timerToggle == true){
+                    self.videoManager.turnOnFlashwithLevel(1.0)
+                }
                 
-//                self.videoManager.turnOnFlashwithLevel(1.0)
             }
             
 //            self.videoManager.turnOnFlashwithLevel(1)
@@ -97,7 +109,11 @@ class ViewController: UIViewController   {
             DispatchQueue.main.async() {
                 self.cameraButton.isEnabled = true
                 self.flashButton.isEnabled = true
-//                self.videoManager.turnOffFlash()
+                if(self.timerToggle == true){
+                    self.videoManager.turnOffFlash()
+
+                    
+                }
             }
         }
         retImage = self.bridge.getImageComposite() // get back opencv processed part of the image (overlayed on original)
@@ -156,6 +172,13 @@ class ViewController: UIViewController   {
         else if(sender.value==0.0){
             self.videoManager.turnOffFlash()
         }
+    }
+    
+    
+    @objc
+    func test(){
+        self.timerToggle = !self.timerToggle
+        print("HERE")
     }
 
    

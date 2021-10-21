@@ -42,7 +42,13 @@ using namespace cv;
 //    sprintf(text,"Avg. B: %.0f, G: %.0f, R: %.0f", avgPixelIntensity.val[0],avgPixelIntensity.val[1],avgPixelIntensity.val[2]);
     sprintf(text,"Avg. R: %.0f, G: %.0f, B: %.0f", avgPixelIntensity.val[0],avgPixelIntensity.val[1],avgPixelIntensity.val[2]);
     cv::putText(_image, text, cv::Point(50, 50), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
-    if(avgPixelIntensity.val[0] > 40 && avgPixelIntensity.val[0] < 80){
+    if(avgPixelIntensity.val[0] > 40 && avgPixelIntensity.val[0] < 90){
+        //data on a iphone 7, maybe different on different models
+        cv::putText(_image, "finger", cv::Point(50, 100), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
+        return true;
+        
+    }
+    else if(avgPixelIntensity.val[0] > 240 && avgPixelIntensity.val[0] < 255){
         //data on a iphone 7, maybe different on different models
         cv::putText(_image, "finger", cv::Point(50, 100), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
         return true;
