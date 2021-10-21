@@ -97,6 +97,7 @@ class ViewController: UIViewController   {
                 self.flashButton.isEnabled = false
                 if(self.timerToggle == true){
                     self.videoManager.turnOnFlashwithLevel(1.0)
+                    self.timerToggle = false
                 }
                 
             }
@@ -111,6 +112,7 @@ class ViewController: UIViewController   {
                 self.flashButton.isEnabled = true
                 if(self.timerToggle == true){
                     self.videoManager.turnOffFlash()
+                    self.timerToggle = false
 
                     
                 }
